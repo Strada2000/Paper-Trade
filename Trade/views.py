@@ -13,3 +13,14 @@ def signup(request):
     )
     serializer = UserSerializer(users, many=False)
     return Response(serializer.data)
+
+@api_view(['POST'])
+def login(request):
+    data = request.data
+    users = Users.objects.get(email = data['email'])
+    seriaizer = UserSerializer(users, many=False)
+
+    if users.password == data['password']:
+        return Response(seriaizer.data['id'] )
+    else:
+        return Response(seriaizer.errors)
