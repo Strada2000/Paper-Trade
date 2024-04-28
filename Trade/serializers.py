@@ -13,10 +13,10 @@ class StockSerializer(ModelSerializer):
 
 class FavoutitestockSerializer(ModelSerializer):
     class Meta:
-        model = Stock
+        model = FavouriteStock
         fields = '__all__'
 
 class PurchasedstockSerializer(ModelSerializer):
     class Meta:
-        model = Stock
+        model = PurchasedStocks
         fields = '__all__'

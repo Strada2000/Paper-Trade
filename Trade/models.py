@@ -8,6 +8,7 @@ class Users(models.Model):
 class Stock(models.Model):
     #stockId = models.AutoField(primary_key=True)
     stockName = models.CharField(max_length=100)
+    stockExternalId = models.IntegerField(default=None)
 
 class FavouriteStock(models.Model):
     #favouriteId = models.AutoField(primary_key=True)
@@ -21,7 +22,7 @@ class PurchasedStocks(models.Model):
     userId = models.ForeignKey(Users, on_delete=models.CASCADE)
     purchaseValue = models.IntegerField()
     purchaseDate = models.DateTimeField()
-    sellValue = models.IntegerField()
-    sellDate = models.DateTimeField()
+    sellValue = models.IntegerField(null=True, default=None)
+    sellDate = models.DateTimeField(null=True, default=None)
     
 

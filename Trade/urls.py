@@ -5,4 +5,5 @@ from . import views
 urlpatterns = [
     path('signup', views.signup, name = 'Signup API' ),
     path('login',views.login, name = 'Login API'),
+    path('purchase', views.buyStocks, name='Purchase Stocks'),
 ]
