@@ -5,6 +5,7 @@ from .models import Users, Stock, FavouriteStock, PurchasedStocks
 from .serializers import UserSerializer, StockSerializer, FavoutitestockSerializer, PurchasedstockSerializer
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
+from .utils import getStock, createStock
 
 @api_view(['POST'])
 def signup(request):
@@ -47,23 +48,20 @@ def buyStocks(request):
     serializer = PurchasedstockSerializer(purchase, many=False)
     return Response(serializer.data)
 
-def getStock(name, externalId):
-    try:
-        stocks = Stock.objects.get(stockName = name)
-        return stocks
-    
-    except ObjectDoesNotExist:
-        stockobject=createStock(name, externalId)
-        serializer1 = StockSerializer(stockobject,many=False)
-        return stockobject
+@api_view(['POST'])
+def sellStocks(request):
+    data = request.data
+    PurchasedStocks.objects.filter(id= data['id']).update(
+        sellValue = data['sellValue'],
+        sellDate = datetime.now()
+    )
+    purchase = PurchasedStocks.objects.filter(id = data['id'])
+    serializer = PurchasedstockSerializer(purchase,many=True)
+    return Response(serializer.data)
 
-def createStock(name, externalId):
-    stocks = Stock.objects
-    try:
-        stocks.create(
-            stockName = name,
-            stockExternalId = externalId
-        )
-    except:
-        return False
-    return Stock.objects.get(stockName = name)
+@api_view(['POST'])
+def getMyStocks(request):
+    data = request.data
+    purchase = PurchasedStocks.objects.filter(userId = data['userId'], sellValue = None) 
+    serializer = PurchasedstockSerializer(purchase, many= True)
+    return Response(serializer.data)
